@@ -48,6 +48,21 @@ header p{margin:6px 0 0;font-size:1rem}
 button{font:700 1rem Nunito,sans-serif;border:0;border-radius:999px;padding:12px 22px;cursor:pointer;background:var(--accent);color:#fff;transition:transform .2s}
 button:hover{transform:scale(1.06) rotate(-2deg)}
 button.ghost{background:var(--paper);color:var(--ink)}
+.rainbow{position:fixed;left:50%;top:22%;width:min(86vw,560px);aspect-ratio:2/1;transform:translateX(-50%);background:radial-gradient(circle farthest-side at 50% 100%,transparent 55%,#ff9fb5 55% 60%,#ffd29a 60% 65%,#fff3a6 65% 70%,#b5f0b7 70% 75%,#a8dcff 75% 80%,#d3b8ff 80% 85%,transparent 85%);opacity:.7;animation:rb 2.6s ease-out both}
+@keyframes rb{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0)}}
+#bun{position:fixed;z-index:12;left:12%;top:82%;font-size:46px;line-height:1;transform:translate(-50%,-100%);transition:left 1s ease-in-out,top 1s ease-in-out;pointer-events:none}
+#bun span{display:block;transform-origin:50% 100%;animation:idle 2.5s ease-in-out infinite}
+#bun.hop span{animation:hop .5s ease-in-out 2}
+@keyframes idle{50%{transform:scale(1.06,.94)}}
+@keyframes hop{50%{transform:translateY(-28px) rotate(-8deg)}}
+.bee{position:fixed;z-index:14;left:0;top:0;font-size:24px;pointer-events:none;animation:buzz 14s ease-in-out infinite}
+@keyframes buzz{0%,100%{transform:translate(20vw,60vh)}20%{transform:translate(45vw,48vh) rotate(10deg)}40%{transform:translate(70vw,66vh) rotate(-10deg)}60%{transform:translate(82vw,50vh)}80%{transform:translate(35vw,72vh)}}
+.cf{position:fixed;top:-30px;z-index:60;pointer-events:none;animation:cfall linear forwards}
+@keyframes cfall{to{transform:translate(var(--dx),110vh) rotate(540deg)}}
+.tr{position:fixed;z-index:24;pointer-events:none;font-size:14px;animation:tr .9s ease-out forwards}
+@keyframes tr{from{opacity:1;transform:translate(-50%,-50%) scale(1)}to{opacity:0;transform:translate(-50%,calc(-50% + 20px)) scale(.3)}}
+.eye{transform-box:fill-box;transform-origin:center;animation:blink 4s infinite}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
 button:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 #win{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:rgba(40,10,30,.45);padding:20px}
 #win[hidden]{display:none}
@@ -57,18 +72,22 @@ button:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 @keyframes bob{50%{transform:translateY(-8px) rotate(6deg)}}
 .card h2{font:400 2rem "Patrick Hand",cursive;margin:8px 0}
 .card p{font:1.35rem/1.4 "Patrick Hand",cursive;margin:0 0 18px}
-@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-iteration-count:1!important}.cloud,.bf{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-iteration-count:1!important}.cloud,.bf,.bee{display:none}}
 </style>
 </head>
 <body>
 <div class="sun" aria-hidden="true"></div>
+<div class="rainbow" aria-hidden="true"></div>
 <div class="cloud" style="top:16%;animation-duration:60s" aria-hidden="true"></div>
 <div class="cloud" style="top:30%;animation-duration:85s;animation-delay:-35s;transform:scale(.7)" aria-hidden="true"></div>
 <span class="bf" aria-hidden="true">🦋</span><span class="bf b2" aria-hidden="true">🦋</span>
+<span class="bee" aria-hidden="true">🐝</span>
 <div id="hill" aria-hidden="true"></div>
+<span style="position:fixed;bottom:3%;right:6%;font-size:30px;z-index:4" aria-hidden="true">🍄</span><span style="position:fixed;bottom:4%;left:4%;font-size:28px;z-index:4" aria-hidden="true">🌼</span>
+<div id="bun" aria-hidden="true"><span>🐰</span></div>
 <header>
-  <h1>Irdyna’s little garden</h1>
-  <p>Tap the grass to plant a peony 🌸</p>
+  <h1>🌷 Irdyna’s little garden 🌷</h1>
+  <p>Tap the grass and the bunny will come hop 🐰🌸</p>
   <span id="count" aria-live="polite">🌸 0 / 12</span>
 </header>
 <div id="field"></div>
@@ -102,10 +121,14 @@ function flower(p){
     for(let i=0;i<n;i++)el("path",{d:petal(r*ws,r*ls),fill:`url(#q${p})`,stroke:palettes[p][2],"stroke-opacity":".35","stroke-width":".8",transform:`rotate(${off+i*360/n+(ri%2?7:0)}) translate(0 ${-r*.04*ri})`},s);
   });
   el("circle",{r:5,fill:palettes[p][2],opacity:".7"},s);
+  el("ellipse",{cx:-30,cy:12,rx:11,ry:7,fill:"#ff7aa8",opacity:".55"},s);el("ellipse",{cx:30,cy:12,rx:11,ry:7,fill:"#ff7aa8",opacity:".55"},s);
+  [-17,17].forEach(x=>el("ellipse",{cx:x,cy:0,rx:5,ry:6.5,fill:"#4a2338",class:"eye"},s));
+  [-17,17].forEach(x=>el("circle",{cx:x+1.8,cy:-2.5,r:1.8,fill:"#fff"},s));
+  el("path",{d:"M-8 11 Q0 20 8 11",fill:"none",stroke:"#4a2338","stroke-width":3,"stroke-linecap":"round"},s);
   s.style.animationDelay=(-Math.random()*4)+"s";
   return s;
 }
-const notes=["I suka tengok you senyum 🤍","You’re so comel, baby!","Alhamdulillah for you 🤍","That cute reaction tho 😭🤍","Can’t wait to see you next month!","Sayang you, baby 🤍","You make me happy, hehe","Muiz is thinking of you :3","Peonies for my favorite person 🌸","Senyum sikit, baby 🥹"];
+const notes=["I suka tengok you senyum 🤍","You’re so comel, baby!","Alhamdulillah for you 🤍","That cute reaction tho 😭🤍","Can’t wait to see you next month!","Sayang you, baby 🤍","You make me happy, hehe","Muiz is thinking of you :3","Peonies for my favorite person 🌸","Senyum sikit, baby 🥹","Boop! 🐰","Bunny says hi, baby 🐰","You’re my favorite, hehe 🤍"];
 let pool=[],count=0;const GOAL=12;
 const field=document.getElementById("field"),countEl=document.getElementById("count");
 function burst(x,y){for(let i=0;i<6;i++){const b=document.createElement("span");b.className="hb";b.textContent=["🌸","🤍","✨","💗"][i%4];b.style.cssText=`left:${x}px;top:${y}px;--dx:${Math.random()*120-60}px;--dy:${-40-Math.random()*80}px`;document.body.appendChild(b);setTimeout(()=>b.remove(),1300)}}
@@ -115,15 +138,18 @@ function plant(x,y,quiet){
   d.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${w*1.5}px;z-index:${Math.round(y)}`;
   d.appendChild(flower(Math.floor(Math.random()*6)));field.appendChild(d);
   if(quiet)return;
-  burst(x,y-w*1.1);
+  burst(x,y-w*1.1);bunny(x,y);
   document.querySelectorAll(".note").forEach(n=>n.remove());
   if(!pool.length)pool=[...notes].sort(()=>Math.random()-.5);
   const n=document.createElement("div");n.className="note";n.textContent=pool.pop();
   n.style.left=Math.min(Math.max(x,115),innerWidth-115)+"px";n.style.top=Math.max(y-w*1.5-10,120)+"px";
   document.body.appendChild(n);setTimeout(()=>n.remove(),3100);
   count++;countEl.textContent=`🌸 ${count} / ${GOAL}`;
-  if(count===GOAL)setTimeout(()=>{document.getElementById("win").hidden=false},900);
+  if(count===GOAL)setTimeout(()=>{document.getElementById("win").hidden=false;for(let i=0;i<46;i++){const c=document.createElement("span");c.className="cf";c.textContent=["🌸","🤍","💗","🌷","✨"][i%5];c.style.cssText=`left:${Math.random()*100}%;font-size:${16+Math.random()*16}px;--dx:${Math.random()*160-80}px;animation-duration:${3+Math.random()*3}s;animation-delay:${Math.random()*1.5}s`;document.body.appendChild(c);setTimeout(()=>c.remove(),7000)}},900);
 }
+const bun=document.getElementById("bun");
+function bunny(x,y){bun.style.left=Math.min(Math.max(x+60,40),innerWidth-40)+"px";bun.style.top=Math.min(y+20,innerHeight-70)+"px";bun.classList.remove("hop");void bun.offsetWidth;bun.classList.add("hop")}
+let lt=0;addEventListener("pointermove",e=>{const n=performance.now();if(n-lt<70)return;lt=n;const t=document.createElement("span");t.className="tr";t.textContent=["✨","🤍","🌸"][Math.random()*3|0];t.style.left=e.clientX+"px";t.style.top=e.clientY+"px";document.body.appendChild(t);setTimeout(()=>t.remove(),900)});
 const lowest=()=>innerHeight*.38;
 field.addEventListener("click",e=>{if(e.clientY>lowest())plant(e.clientX,e.clientY);else burst(e.clientX,e.clientY)});
 document.getElementById("plant").addEventListener("click",()=>plant(innerWidth*(.1+Math.random()*.8),lowest()+60+Math.random()*(innerHeight-lowest()-130)));
