@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Irdyna’s little garden</title>
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky1:#ffe3ee; --sky2:#d8efff; --grass:#a6dca4; --grass2:#7cc47f; --ink:#4a2338; --paper:#fffafb; --accent:#d9467f; --leaf:#4f8f58; --cloud:#ffffff;
+  color-scheme:light; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--sky1:#3a2147;--sky2:#17213d;--grass:#2f5f45;--grass2:#234a37;--ink:#fbe6ee;--paper:#2c1b27;--accent:#f48bb4;--leaf:#79b783;--cloud:#4b3a63;color-scheme:dark}
+}
+:root[data-theme="dark"]{--sky1:#3a2147;--sky2:#17213d;--grass:#2f5f45;--grass2:#234a37;--ink:#fbe6ee;--paper:#2c1b27;--accent:#f48bb4;--leaf:#79b783;--cloud:#4b3a63;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;height:100%;overflow:hidden;font-family:Nunito,system-ui,sans-serif;color:var(--ink);background:linear-gradient(var(--sky1),var(--sky2));-webkit-tap-highlight-color:transparent}
+.hand{font-family:"Patrick Hand",Georgia,cursive}
+header{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;text-align:center;padding:18px 16px 0;z-index:20;pointer-events:none}
+h1{margin:0;font:400 clamp(2rem,7vw,3.6rem)/1 "Patrick Hand",Georgia,cursive}
+header p{margin:6px 0 0;font-size:1rem}
+#count{display:inline-block;margin-top:10px;background:var(--paper);border-radius:999px;padding:6px 16px;font-weight:700;box-shadow:0 6px 18px -8px var(--accent)}
+.sun{position:fixed;top:12%;right:8%;width:70px;height:70px;border-radius:50%;background:#ffd86b;box-shadow:0 0 0 14px rgba(255,216,107,.3),0 0 40px 20px rgba(255,216,107,.35);animation:pulse 4s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.08)}}
+.cloud{position:fixed;left:-160px;width:110px;height:34px;background:var(--cloud);border-radius:40px;opacity:.9;animation:drift linear infinite}
+.cloud::before,.cloud::after{content:"";position:absolute;background:var(--cloud);border-radius:50%}
+.cloud::before{width:46px;height:46px;left:14px;top:-22px}.cloud::after{width:36px;height:36px;left:52px;top:-14px}
+@keyframes drift{to{transform:translateX(calc(100vw + 320px))}}
+#hill{position:fixed;left:-15%;right:-15%;bottom:-38%;height:70%;border-radius:50%;background:radial-gradient(ellipse at 50% 0,var(--grass),var(--grass2))}
+#field{position:fixed;inset:0;cursor:pointer;z-index:5}
+.fl{position:absolute;pointer-events:none;transform:translate(-50%,-100%);transform-origin:50% 100%;animation:grow 1.2s cubic-bezier(.2,.9,.3,1.3) both}
+.fl svg{width:100%;height:100%;overflow:visible;transform-origin:50% 100%;animation:sway 4.5s ease-in-out infinite}
+@keyframes grow{from{transform:translate(-50%,-100%) scale(0)}to{transform:translate(-50%,-100%) scale(1)}}
+@keyframes sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+.note{position:fixed;z-index:30;transform:translate(-50%,-100%);max-width:220px;background:var(--paper);padding:10px 14px;border-radius:16px;font:1.2rem/1.25 "Patrick Hand",cursive;text-align:center;box-shadow:0 10px 24px -10px rgba(0,0,0,.4);pointer-events:none;animation:pop .35s ease-out both,out .4s 2.6s forwards}
+.note::after{content:"";position:absolute;left:50%;bottom:-8px;margin-left:-8px;border:8px solid transparent;border-bottom:0;border-top-color:var(--paper)}
+@keyframes pop{from{opacity:0;transform:translate(-50%,-80%) scale(.7)}}
+@keyframes out{to{opacity:0}}
+.hb{position:fixed;z-index:25;pointer-events:none;font-size:20px;animation:fly 1.2s ease-out forwards}
+@keyframes fly{from{transform:translate(-50%,-50%) scale(.4);opacity:1}to{transform:translate(calc(-50% + var(--dx)),var(--dy)) scale(1.2);opacity:0}}
+.bf{position:fixed;z-index:6;font-size:26px;pointer-events:none;left:0;top:0;animation:flit 22s linear infinite}
+.bf.b2{animation-duration:30s;animation-delay:-12s;font-size:20px}
+@keyframes flit{0%{transform:translate(-8vw,55vh)}25%{transform:translate(28vw,38vh) rotate(-10deg)}50%{transform:translate(55vw,60vh) rotate(10deg)}75%{transform:translate(80vw,35vh) rotate(-8deg)}100%{transform:translate(110vw,50vh)}}
+.bar{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:0;right:0;display:flex;justify-content:center;gap:10px;z-index:20}
+button{font:700 1rem Nunito,sans-serif;border:0;border-radius:999px;padding:12px 22px;cursor:pointer;background:var(--accent);color:#fff;transition:transform .2s}
+button:hover{transform:scale(1.06) rotate(-2deg)}
+button.ghost{background:var(--paper);color:var(--ink)}
+button:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+#win{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:rgba(40,10,30,.45);padding:20px}
+#win[hidden]{display:none}
+.card{background:var(--paper);border-radius:24px;padding:32px 26px;max-width:420px;text-align:center;animation:pop2 .7s cubic-bezier(.2,.9,.3,1.3) both}
+@keyframes pop2{from{transform:scale(.3) rotate(-10deg);opacity:0}}
+.card .env{font-size:64px;animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px) rotate(6deg)}}
+.card h2{font:400 2rem "Patrick Hand",cursive;margin:8px 0}
+.card p{font:1.35rem/1.4 "Patrick Hand",cursive;margin:0 0 18px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-iteration-count:1!important}.cloud,.bf{display:none}}
+</style>
+</head>
+<body>
+<div class="sun" aria-hidden="true"></div>
+<div class="cloud" style="top:16%;animation-duration:60s" aria-hidden="true"></div>
+<div class="cloud" style="top:30%;animation-duration:85s;animation-delay:-35s;transform:scale(.7)" aria-hidden="true"></div>
+<span class="bf" aria-hidden="true">🦋</span><span class="bf b2" aria-hidden="true">🦋</span>
+<div id="hill" aria-hidden="true"></div>
+<header>
+  <h1>Irdyna’s little garden</h1>
+  <p>Tap the grass to plant a peony 🌸</p>
+  <span id="count" aria-live="polite">🌸 0 / 12</span>
+</header>
+<div id="field"></div>
+<div class="bar">
+  <button id="plant" type="button">🌸 Plant a peony</button>
+  <button id="reset" class="ghost" type="button">Start again</button>
+</div>
+<section id="win" hidden role="dialog" aria-label="A note from Muiz">
+  <div class="card">
+    <div class="env" aria-hidden="true">💌</div>
+    <h2>Baby Irdyna, you grew a whole garden!</h2>
+    <p>Every flower is for you. Sayang you, baby. Can’t wait to see you next month 🤍</p>
+    <p class="hand" style="color:var(--accent);margin-bottom:20px">from Muiz :3</p>
+    <button id="more" type="button">Plant more 🌸</button>
+  </div>
+</section>
+<script>
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e};
+const palettes=[["#fde4ee","#f3a6c3","#d4608f"],["#fff3f6","#f9cfdd","#e79bb7"],["#f9b9cf","#e8719f","#b83a6b"],["#ffe9e2","#f8bfb5","#e98c8c"],["#fffafa","#fde0e8","#f3b3c9"],["#f6c6e0","#d77fb5","#9e3a82"]];
+const gs=el("svg",{width:0,height:0,style:"position:absolute"},document.body),gd=el("defs",{},gs);
+palettes.forEach((c,i)=>{const g=el("radialGradient",{id:"q"+i,cx:"50%",cy:"90%",r:"95%"},gd);el("stop",{offset:"0","stop-color":c[2]},g);el("stop",{offset:".55","stop-color":c[1]},g);el("stop",{offset:"1","stop-color":c[0]},g)});
+const petal=(w,h)=>`M0 0 C${-w} ${-h*.35} ${-w*1.05} ${-h*.85} ${-w*.55} ${-h*.97} Q${-w*.25} ${-h*1.06} 0 ${-h*.93} Q${w*.25} ${-h*1.06} ${w*.55} ${-h*.97} C${w*1.05} ${-h*.85} ${w} ${-h*.35} 0 0Z`;
+function flower(p){
+  const s=el("svg",{viewBox:"-100 -100 200 300"});
+  el("path",{d:"M0 0 C-6 70 6 130 0 200",fill:"none",stroke:"var(--leaf)","stroke-width":7,"stroke-linecap":"round"},s);
+  el("path",{d:"M0 125 C-45 95 -85 110 -90 140 C-55 150 -20 145 0 125Z",fill:"var(--leaf)"},s);
+  el("path",{d:"M0 150 C45 120 85 135 90 165 C55 175 20 170 0 150Z",fill:"var(--leaf)"},s);
+  const r=75;
+  [[10,1,.55,0],[9,.88,.52,18],[8,.76,.5,9],[8,.64,.46,26],[7,.52,.42,12],[6,.4,.38,34],[5,.28,.32,20],[5,.16,.26,45]].forEach(([n,ls,ws,off],ri)=>{
+    for(let i=0;i<n;i++)el("path",{d:petal(r*ws,r*ls),fill:`url(#q${p})`,stroke:palettes[p][2],"stroke-opacity":".35","stroke-width":".8",transform:`rotate(${off+i*360/n+(ri%2?7:0)}) translate(0 ${-r*.04*ri})`},s);
+  });
+  el("circle",{r:5,fill:palettes[p][2],opacity:".7"},s);
+  s.style.animationDelay=(-Math.random()*4)+"s";
+  return s;
+}
+const notes=["I suka tengok you senyum 🤍","You’re so comel, baby!","Alhamdulillah for you 🤍","That cute reaction tho 😭🤍","Can’t wait to see you next month!","Sayang you, baby 🤍","You make me happy, hehe","Muiz is thinking of you :3","Peonies for my favorite person 🌸","Senyum sikit, baby 🥹"];
+let pool=[],count=0;const GOAL=12;
+const field=document.getElementById("field"),countEl=document.getElementById("count");
+function burst(x,y){for(let i=0;i<6;i++){const b=document.createElement("span");b.className="hb";b.textContent=["🌸","🤍","✨","💗"][i%4];b.style.cssText=`left:${x}px;top:${y}px;--dx:${Math.random()*120-60}px;--dy:${-40-Math.random()*80}px`;document.body.appendChild(b);setTimeout(()=>b.remove(),1300)}}
+function plant(x,y,quiet){
+  const w=Math.max(90,Math.min(innerWidth,innerHeight)*(.16+Math.random()*.08));
+  const d=document.createElement("div");d.className="fl";
+  d.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${w*1.5}px;z-index:${Math.round(y)}`;
+  d.appendChild(flower(Math.floor(Math.random()*6)));field.appendChild(d);
+  if(quiet)return;
+  burst(x,y-w*1.1);
+  document.querySelectorAll(".note").forEach(n=>n.remove());
+  if(!pool.length)pool=[...notes].sort(()=>Math.random()-.5);
+  const n=document.createElement("div");n.className="note";n.textContent=pool.pop();
+  n.style.left=Math.min(Math.max(x,115),innerWidth-115)+"px";n.style.top=Math.max(y-w*1.5-10,120)+"px";
+  document.body.appendChild(n);setTimeout(()=>n.remove(),3100);
+  count++;countEl.textContent=`🌸 ${count} / ${GOAL}`;
+  if(count===GOAL)setTimeout(()=>{document.getElementById("win").hidden=false},900);
+}
+const lowest=()=>innerHeight*.38;
+field.addEventListener("click",e=>{if(e.clientY>lowest())plant(e.clientX,e.clientY);else burst(e.clientX,e.clientY)});
+document.getElementById("plant").addEventListener("click",()=>plant(innerWidth*(.1+Math.random()*.8),lowest()+60+Math.random()*(innerHeight-lowest()-130)));
+document.getElementById("reset").addEventListener("click",()=>{field.innerHTML="";count=0;countEl.textContent=`🌸 0 / ${GOAL}`;seed()});
+document.getElementById("more").addEventListener("click",()=>{document.getElementById("win").hidden=true});
+function seed(){[[.22,.8],[.5,.88],[.78,.78]].forEach(([a,b],i)=>setTimeout(()=>plant(innerWidth*a,innerHeight*b,true),300+i*350))}
+seed();
+</script>
+</body>
+</html>
